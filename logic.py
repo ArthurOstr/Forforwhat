@@ -1,21 +1,19 @@
-import pygame
+import random
+class Deck:
+    def __init__(self):
+        suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
+        ranks = ["Jack", "Queen", "King", "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10" ]
+        self.cards = [Card(rank,suit) for rank in ranks for suit in suits]
 
-pygame.init()
+    def draw(self):
+        card = random.choice(self.cards)
+        self.cards.remove(card)
+        return card
 
-screen_width = 600
-screen_height = 400
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Pygame Drawing")
+class Card:
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
 
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    screen.fill((0, 0, 0))  # Black background
-    pygame.draw.circle(screen, (255, 0, 0), (300, 200), 50)  # Red circle
-
-    pygame.display.flip()
-
-pygame.quit()
+    def show(self):
+        return f"{self.rank} of {self.suit}"
