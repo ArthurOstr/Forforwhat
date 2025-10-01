@@ -21,7 +21,10 @@ class Card:
 
 class Hand:
     def __init__(self):
-        hand = []
+        self.hand = []
 
     def look(self):
         return self.card.show()
+
+class Dealer:
+    def __init__(self):
