@@ -17,3 +17,11 @@ class Card:
 
     def show(self):
         return f"{self.rank} of {self.suit}"
+
+
+class Hand:
+    def __init__(self):
+        hand = []
+
+    def look(self):
+        return self.card.show()
