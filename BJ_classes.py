@@ -11,6 +11,10 @@ class Deck:
         self.cards.remove(card)
         return card
 
+#It seems i can look at cards in my deck
+    def look_deck(self):
+        return len(self.cards)
+
 class Card:
     def __init__(self, rank, suit):
         self.rank = rank
@@ -25,15 +29,23 @@ class Hand:
     def __init__(self):
         self.hand = []
 
+#adding card to my hand
+    def add_card(self, card):
+        self.hand.append(card)
+
 #It seems i can look at cards in my hand
     def look(self):
-        return self.card.show()
+        return len(self.hand)
 
 class Dealer:
     def __init__(self):
         self.deck = Deck()
 
-if __name__ == "__main__":
-    print("this is logic file")
+#reshuffle the deck when needed
+    def reshuffle(self):
+        self.deck = Deck()
+        print(f"{self.deck.look_deck()} cards is here")
 
-# i need to enhance Hand methods, add more logic to dealer and add class Game to connect it with other classes
+
+
+# I have two separate to run values of cards and i'm going to test them both
