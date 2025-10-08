@@ -24,13 +24,17 @@ class Deck:
 
 
 class Card:
-    def __init__(self, rank, suit):
+    def __init__(self, rank, suit, visible=True):
         self.rank = rank
         self.suit = suit
+        self.visible = visible
 
 #how does card looks like
     def show(self):
-        return f"{self.rank} of {self.suit}"
+        if not self.visible:
+            return "Hidden Card"
+        else:
+            return f"{self.rank} of {self.suit}"
 
 
 class Hand:
@@ -52,20 +56,24 @@ class Hand:
             return
 
         removed_card = self.hand.pop(0)
-        removed_card.append(self.stored_cards)
+        self.stored_cards.append(removed_card)
 
-        print (f"Removed card: {self.removed_card.show()}")
-        #it's not done yet
+        print (f"Success removing {removed_card.show()} from hand.")
+
+    def show_hand(self):
+        return [card.show() for card in self.hand]
 
 #It seems I can look at cards in my hand
     def look(self):
         return len(self.hand)
 
 class Dealer:
-    def __init__(self):
-        self.deck = Deck()
+    def __init__(self,deck):
+        self.deck = deck
+        self.hand = Hand()
 
-#reshuffle the deck when needed
-
-
-
+    def deal_card(self, hand, visible=True):
+        card = self.deck.draw()
+        card.visible = visible
+        hand.add_card(card)
+        return card
