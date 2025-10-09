@@ -36,6 +36,9 @@ class Card:
         else:
             return f"{self.rank} of {self.suit}"
 
+    def flip(self):
+        self.visible = not self.visible
+
 
 class Hand:
     def __init__(self):
@@ -63,6 +66,29 @@ class Hand:
     def show_hand(self):
         return [card.show() for card in self.hand]
 
+    def multiple_flip(self):
+        for card in self.hand:
+            if not card.visible:
+                card.flip()
+
+    def get_value(self):
+        value = 0
+        aces = 0
+        for card in self.hand:
+            if not card.visible:
+                continue
+            if card.rank in ['Jack', 'Queen', 'King']:
+                value += 10
+            elif card.rank == 'Ace':
+                aces += 1
+                value += 11
+            else:
+                value += int(card.rank)
+        while value > 21 and aces:
+            value -= 10
+            aces -= 1
+        return value
+
 #It seems I can look at cards in my hand
     def look(self):
         return len(self.hand)
@@ -76,4 +102,39 @@ class Dealer:
         card = self.deck.draw()
         card.visible = visible
         hand.add_card(card)
-        return card
+
+
+    def restart(self):
+        self.hand = Hand()
+        print("Dealer's hand is empty")
+
+    def reveal(self):
+        self.hand.multiple_flip()
+        print("Dealer revealed his cards")
+
+class Player(Dealer):
+
+    def __init__(self,deck, balance=100):
+        self.deck = deck
+        self.hand = Hand()
+        self.balance = balance
+        super().__init__(self.deck)
+
+    def place_bet(self, amount):
+        if amount > self.balance:
+            raise ValueError("Bet exceeds available balance")
+        self.current_bet = amount
+        self.balance -= amount
+
+    def win_bet(self):
+        self.balance += 2 * self.current_bet
+        print(f"Player wins {self.current_bet * 2}!")
+
+    def lose_bet(self):
+        print(f"Player loses {self.current_bet}!")
+
+    def push_bet(self):
+        self.balance += self.current_bet
+        print("It's a push! Bet returned to player.")
+
+
