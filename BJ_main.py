@@ -31,10 +31,10 @@ def play_game():
                 print("Please enter a valid number")
 
         # Initial deal
-        dealer.deal_card(player.hand, visible=True)
-        dealer.deal_card(dealer.hand, visible=False)
-        dealer.deal_card(player.hand, visible=True)
         dealer.deal_card(dealer.hand, visible=True)
+        dealer.deal_card(dealer.hand, visible=False)
+        player.get_card(player.hand)
+        player.get_card(player.hand)
 
         # player turn
         player_turn = True
@@ -44,7 +44,7 @@ def play_game():
             choice_is_hit = choice == 'h'
 
             if choice_is_hit:
-                dealer.deal_card(player.hand)
+                player.get_card(player.hand)
                 if player.hand.get_value() > 21:
                     print("Player busts!")
                     player_turn = False

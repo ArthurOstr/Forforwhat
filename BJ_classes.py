@@ -103,7 +103,6 @@ class Dealer:
         card.visible = visible
         hand.add_card(card)
 
-
     def restart(self):
         self.hand = Hand()
         print("Dealer's hand is empty")
@@ -112,13 +111,17 @@ class Dealer:
         self.hand.multiple_flip()
         print("Dealer revealed his cards")
 
-class Player(Dealer):
+class Player():
 
     def __init__(self,deck, balance=100):
         self.deck = deck
         self.hand = Hand()
         self.balance = balance
-        super().__init__(self.deck)
+        self.current_bet = 0
+
+    def get_card(self, hand):
+        card = self.deck.draw()
+        hand.add_card(card)
 
     def place_bet(self, amount):
         if amount > self.balance:
