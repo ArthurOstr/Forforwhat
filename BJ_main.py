@@ -15,6 +15,9 @@ def play_game():
     player = Player(deck, 100)
 
     while player.balance > 0:
+        # Check deck size
+        if deck.look_deck() < 15:
+            deck.restart()
         # Reset hands for new round
         dealer.hand.restart_hand()
         player.hand.restart_hand()
@@ -31,43 +34,41 @@ def play_game():
                 print("Please enter a valid number")
 
         # Initial deal
-        dealer.deal_card(dealer.hand, visible=True)
-        dealer.deal_card(dealer.hand, visible=False)
-        player.get_card(player.hand)
-        player.get_card(player.hand)
+        dealer.deal_card(visible=True)
+        dealer.deal_card(visible=False)
+        player.get_card()
+        player.get_card()
 
         # player turn
-        player_turn = True
-        while player_turn:
+        player_busted = False
+        while True:
             show_table(player, dealer)
             choice = input("Hit or Stand? (h/s): ").lower()
-            choice_is_hit = choice == 'h'
-
-            if choice_is_hit:
-                player.get_card(player.hand)
+            if choice == 'h':
+                player.get_card()
+                dealer.deal_card(visible=False)
                 if player.hand.get_value() > 21:
                     print("Player busts!")
-                    player_turn = False
-            else:
-                player_turn = False
+                    player_busted = True
+                    break
+            elif choice == 's':
+                break
 
-        # dealer turn
-        while dealer.hand.get_value() < 17:
-            dealer.deal_card(dealer.hand, visible=False)
+        # Dealer's turn only if player hasn't busted
+        if not player_busted:
+            dealer.reveal()  # Reveal dealer's hidden card
+            while dealer.hand.get_value() < 17:
+                dealer.deal_card()
 
-        # value comparison
-        show_table(player, dealer)
-        player_value = player.hand.get_value()
-        dealer_value = dealer.hand.get_value()
+            # value comparison
+            show_table(player, dealer)
+            player_value = player.hand.get_value()
+            dealer_value = dealer.hand.get_value()
 
-        if player_value > 21:
-            print("Player busts! Dealer wins!")
-            player.lose_bet()
-        elif dealer_value > 21:
-            print("Dealer busts! Player wins!")
-            player.win_bet()
-        else:
-            if player_value > dealer_value:
+            if dealer_value > 21:
+                print("Dealer busts! Player wins!")
+                player.win_bet()
+            elif player_value > dealer_value:
                 print("Player wins!")
                 player.win_bet()
             elif dealer_value > player_value:
@@ -76,6 +77,8 @@ def play_game():
             else:
                 print("Push - it's a tie!")
                 player.push_bet()
+        else:
+            player.lose_bet()
 
         if player.balance <= 0:
             print("Game over! You're out of money!")
@@ -83,9 +86,8 @@ def play_game():
 
         # Ask to play again
         if not input("Play another round? (y/n): ").lower().startswith('y'):
+            print("Thanks for playing!")
             break
-
 
 if __name__ == "__main__":
     play_game()
-

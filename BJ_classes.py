@@ -75,8 +75,6 @@ class Hand:
         value = 0
         aces = 0
         for card in self.hand:
-            if not card.visible:
-                continue
             if card.rank in ['Jack', 'Queen', 'King']:
                 value += 10
             elif card.rank == 'Ace':
@@ -98,10 +96,10 @@ class Dealer:
         self.deck = deck
         self.hand = Hand()
 
-    def deal_card(self, hand, visible=True):
+    def deal_card(self,visible=False):
         card = self.deck.draw()
         card.visible = visible
-        hand.add_card(card)
+        self.hand.add_card(card)
 
     def restart(self):
         self.hand = Hand()
@@ -119,13 +117,14 @@ class Player():
         self.balance = balance
         self.current_bet = 0
 
-    def get_card(self, hand):
+    def get_card(self):
         card = self.deck.draw()
-        hand.add_card(card)
+        self.hand.add_card(card)
 
     def place_bet(self, amount):
         if amount > self.balance:
-            raise ValueError("Bet exceeds available balance")
+            print("Bet exceeds available balance")
+            return
         self.current_bet = amount
         self.balance -= amount
 
