@@ -1,9 +1,8 @@
 import random
+
 class Deck:
     def __init__(self):
-        suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
-        ranks = ["Jack", "Queen", "King", "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10" ]
-        self.cards = [Card(rank,suit) for rank in ranks for suit in suits]
+        self.restart()
 
 #taking 1 card from the deck
     def draw(self):
@@ -20,7 +19,7 @@ class Deck:
         suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
         ranks = ["Jack", "Queen", "King", "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
         self.cards = [Card(rank, suit) for rank in ranks for suit in suits]
-        print("Deck is ready")
+
 
 
 class Card:
@@ -51,7 +50,7 @@ class Hand:
 
     def restart_hand(self):
         self.hand = []
-        print("Hand is empty")
+
 
     def remove_card(self):
         if not self.hand:
@@ -96,7 +95,7 @@ class Dealer:
         self.deck = deck
         self.hand = Hand()
 
-    def deal_card(self,visible=False):
+    def deal_card(self,visible=True):
         card = self.deck.draw()
         card.visible = visible
         self.hand.add_card(card)
@@ -109,16 +108,15 @@ class Dealer:
         self.hand.multiple_flip()
         print("Dealer revealed his cards")
 
-class Player():
+class Player:
 
-    def __init__(self,deck, balance=100):
-        self.deck = deck
+    def __init__(self, balance=1000, win_count=0):
         self.hand = Hand()
         self.balance = balance
         self.current_bet = 0
+        self.win_count = win_count
 
-    def get_card(self):
-        card = self.deck.draw()
+    def receive_card(self, card):
         self.hand.add_card(card)
 
     def place_bet(self, amount):
@@ -130,6 +128,7 @@ class Player():
 
     def win_bet(self):
         self.balance += 2 * self.current_bet
+        self.win_count += 1
         print(f"Player wins {self.current_bet * 2}!")
 
     def lose_bet(self):
