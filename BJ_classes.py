@@ -44,13 +44,15 @@ class Hand:
         self.hand = []
         self.stored_cards = []
 
+    def __len__(self):
+        return len(self.hand)
+
 #adding card to my hand
     def add_card(self, card):
         self.hand.append(card)
 
     def restart_hand(self):
         self.hand = []
-
 
     def remove_card(self):
         if not self.hand:
@@ -137,5 +139,16 @@ class Player:
     def push_bet(self):
         self.balance += self.current_bet
         print("It's a push! Bet returned to player.")
+
+    #way to double bet
+    def double_bet(self, deck):
+        if self.balance >= self.current_bet:
+            self.current_bet *= 2
+            self.receive_card(deck)
+            return True
+        elif self.balance <= self.current_bet:
+            return False
+
+
 
 

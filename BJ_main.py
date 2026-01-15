@@ -66,13 +66,21 @@ def play_game(username,start_balance, start_wins):
         player_busted = False
         while True:
             show_table(player, dealer, reveal=False)
-            choice = input("Hit or Stand? (h/s): ").lower()
+            choice = input("Hit , Double bet and hit or Stand (h/d/s): ").lower()
             if choice == 'h':
                 player.receive_card(deck.draw())
                 if player.hand.get_value() > 21:
                     print("Player busts!")
                     player_busted = True
                     break
+            elif choice == 'd':
+                if len(player.hand) == 2:
+                    player.double_bet(deck.draw())
+                    break
+                else:
+                    print("You can't do that")
+                    return None
+
             elif choice == 's':
                 break
 
